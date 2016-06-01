@@ -1,0 +1,135 @@
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% include 'medical_equipments_head.html' %}
+
+
+<body>
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                
+      </button>
+      <a class="navbar-brand">Central Medical Equipments Directory</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      
+      <ul class="nav navbar-nav navbar-right">
+
+      {% if not user.is_authenticated %}
+
+        <li><a href="/register"><span class="glyphicon glyphicon-log-in"></span> Sign Up </a></li>
+
+        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+
+        {% endif %}
+
+        {% if user.is_authenticated %}
+        <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+{% if not user.is_authenticated %}
+<br><br>
+<form class = "form-horizontal" method ="post" action = "{% url 'authorized_view' %}"> {% csrf_token %}
+<div class ="form-group">
+   <label class="control-label col-md-4">username</label>
+<div class="col-md-4">
+<input type = "text" class = "form-control" placeholder = "username" name = "username">
+   </div>
+   </div>
+
+<div class ="form-group">
+    <label class="control-label col-md-4">Password</label>
+    <div class="col-md-4 selectContainer">
+    <input type = "password" class = "form-control" placeholder = "password" name = "password">   
+    </div>
+    </div>
+
+
+
+
+{% if messages %}
+<div class = "col-md-4 col-md-6 " >
+<div class="alert alert-danger">
+{% for message in messages %}
+        {{ message|safe }}
+{% endfor %}
+</div>
+</div>
+{% endif %}
+
+<br>
+   <div class="form-group" >
+    <div class="col-sm-offset-3 col-md-6 text-center" >
+      <button class="btn btn-info btn-lg" type = "submit" >login</button>
+    </div>
+  </div>
+   </form>
+
+
+{% endif %}
+
+
+{% if not user.is_authenticated %}
+
+  
+
+
+{% endif %}
+
+
+{% if user.is_authenticated %}
+ <form class="form-horizontal" method = "post" id = "branchForm" role = "form" >{% csrf_token %}
+
+
+    {% for field in medical_equipments_form %}
+     
+  <div class="form-group" id="{{field.label}}">
+	<label class="control-label col-md-3">{{ field.label }}</label>
+    <div class="col-md-6 selectContainer" >
+    {{ field }}    
+    </div>
+  </div>
+{% endfor %}
+  <!-- Submit Button -->
+  
+<div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button class="btn btn-success btn-lg" type = "submit" >submit</button>
+    </div>
+  </div>
+</form>
+
+{% endif %}
+
+
+
+&copy /wrig nanosystems pvt ltd
+
+</body>
+</html>
+

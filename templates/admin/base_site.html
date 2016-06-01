@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+
+{% load staticfiles %}
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+
+
+{% load i18n %}
+
+{% block title %}
+{{title}} | Central Medical Equipments Directory Administration {% endblock %}
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}">Central Medical Equipments Directory Administration</a> </h1>
+
+
+{% endblock %}
+
+
+
+{% block nav-global %}
+
+
+<!-- 
+ <h4>&nbsp &nbsp <a href="/download_csv"><span class="glyphicon glyphicons-download-alt"></span>download csv</a>
+&nbsp
+&nbsp
+
+<a &nbsp &nbsp &nbsp &nbsp &nbsp href="/import_csv"><span class="glyphicon glyphicons-download-alt"></span>import csv</a>
+&nbsp
+&nbsp
+  -->
+<!--  <form action="/import_csv">
+  Select a csv file to upload: <input type="file" name="csvf">
+  <input type="submit" href="/import_csv">
+  
+</form> 
+ -->
+
+
+<!--  <form class="form-horizontal" method = "post" id = "fileform" role = "form" >{% csrf_token %}
+
+
+    {% for field in save_csv %}
+     
+  <div class="form-group" id="{{field.label}}">
+	<label class="control-label col-md-3">{{ field.label }}</label>
+    <div class="col-md-6 selectContainer" >
+    {{ field }}    
+    </div>
+  </div>
+  </form>
+{% endfor %} -->
+
+<!-- <a &nbsp &nbsp &nbsp &nbsp &nbsp href="/get_allocation"><span class="glyphicon glyphicons-download-alt"></span>allocation results</a>
+&nbsp
+&nbsp
+
+<a &nbsp &nbsp &nbsp &nbsp &nbsp href="/see_allocation"><span class="glyphicon glyphicons-download-alt"></span>see allocation</a>
+
+&nbsp
+&nbsp
+
+<a &nbsp &nbsp &nbsp &nbsp &nbsp href="/see_stats"><span class="glyphicon glyphicons-download-alt"></span>see stats</a></h4>
+
+ -->
+{% endblock %}
+
+
