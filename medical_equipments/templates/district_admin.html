@@ -1,4 +1,4 @@
-{% if user.is_superuser %}
+{% if user.is_staff %}
 
 
 {% load staticfiles %}
@@ -52,7 +52,8 @@ table#t01 th  {
       <ul class="nav navbar-nav navbar-right">
 
 {% if user.is_authenticated %}
-        <li><a href="/state_admin"><span class="glyphicon glyphicon-user"></span>Current Admins</a></li>
+
+      <li><a href="/district_requests"><span class="glyphicon glyphicon-user"></span> Pending Requests</a></li>
 
         <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
 
@@ -80,10 +81,11 @@ table#t01 th  {
     <th>Middle Name</th>
     <th>Last Name</th>
     <th>State</th>
+    <th>District</th>
     <th>Mobile No.</th>
     <th>Documents</th>
-    <th>Approval</th>
-    <th>Rejection</th>
+    
+    <th>Remove</th>
   </tr>
  
   {% for x in queryset %}
@@ -96,24 +98,15 @@ table#t01 th  {
   <th>{{ x.middle_name }}</th>
   <th>{{ x.last_name }}</th>
   <th>{{ x.state }}</th>
+  <th>{{ x.district }}</th>
   <th>{{ x.mobile }}</th>
   <th><a href = '/media/{{x.file}}' style="cursor:pointer">{{ x.file }}</a></th>
-  <th>
-  
-  
-
-<form method="POST">{% csrf_token %}
-<a href='/state_approve?email={{ x.email }}'>Approve</a>
-
-</form>
-    
-
-      </th>
+ 
 
 <th>
   
  <form method="POST">{% csrf_token %}
-<a href='/state_reject?email={{ x.email }}'>Approve</a>
+<a href='/district_remove?email={{ x.email }}'>Remove</a>
 
 </form>
 

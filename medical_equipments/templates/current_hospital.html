@@ -1,5 +1,3 @@
-{% if user.is_superuser %}
-
 
 {% load staticfiles %}
 
@@ -51,9 +49,10 @@ table#t01 th  {
       
       <ul class="nav navbar-nav navbar-right">
 
-{% if user.is_authenticated %}
-        <li><a href="/state_admin"><span class="glyphicon glyphicon-user"></span>Current Admins</a></li>
 
+
+        {% if user.is_authenticated %}
+        
         <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
 
         <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
@@ -75,49 +74,34 @@ table#t01 th  {
 
 <table class="sortable">
   <tr>
-    <th>Email ID</th>
-    <th>First Name</th>    
-    <th>Middle Name</th>
-    <th>Last Name</th>
-    <th>State</th>
-    <th>Mobile No.</th>
-    <th>Documents</th>
-    <th>Approval</th>
-    <th>Rejection</th>
+    <th>Hospital ID</th>
+    <th>Hospital Name</th>    
+    <th>Hospital Type</th>
+    <th>Contact</th>
+    <th>Address</th>
+    <th>Pin Code</th>
   </tr>
  
   {% for x in queryset %}
 
-  <form class="form-horizontal" method = "post" id = "state_adminForm" role = "form" >{% csrf_token %}
+  <form class="form-horizontal" method = "post" id = "hospForm" role = "form" >{% csrf_token %}
 
   <tr>
-  <th>{{ x.email }}</th>
-  <th>{{ x.first_name }}</th>
-  <th>{{ x.middle_name }}</th>
-  <th>{{ x.last_name }}</th>
-  <th>{{ x.state }}</th>
-  <th>{{ x.mobile }}</th>
-  <th><a href = '/media/{{x.file}}' style="cursor:pointer">{{ x.file }}</a></th>
   <th>
-  
-  
+    <form method="POST">{% csrf_token %}
+    <a href='/medical_equipments_form?hid={{ x.hospital_id }}'>{{ x.hospital_id }}</a>
 
-<form method="POST">{% csrf_token %}
-<a href='/state_approve?email={{ x.email }}'>Approve</a>
+    </form>
 
-</form>
-    
 
-      </th>
+  </th>
+  <th>{{ x.hospital_name }}</th>
+  <th>{{ x.hospital_type }}</th>
+  <th>{{ x.mobile }}</th>
+  <th>{{ x.state }}</th>
+  <th>{{ x.address }}</th>
+  <th>{{ x.pincode }}</th>
 
-<th>
-  
- <form method="POST">{% csrf_token %}
-<a href='/state_reject?email={{ x.email }}'>Approve</a>
-
-</form>
-
-</th>
 
 </tr>
 
@@ -136,4 +120,3 @@ table#t01 th  {
 </html>
 
 
-{% endif %}

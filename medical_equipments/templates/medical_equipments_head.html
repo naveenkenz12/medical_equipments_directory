@@ -127,6 +127,135 @@ $(document).ready(function() {
 
 </script>
 
+<script>
+
+$(document).ready(function() {
+    $('#stateadminForm').bootstrapValidator({
+        
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields:{
+            email:{
+                validators:{
+                    notEmpty:{
+                        message: 'Email ID Can Not Be Empty'
+                    },
+                    stringLength:{
+                        min: 0,
+                        max: 100,
+                        message: 'Email ID Must Be Less Than 100 Characters Long'
+                    },
+                    regexp:{
+                        regexp: /^.+@.+\..+$/,
+                        message: 'Invalid Email ID'
+                    }
+                    
+                }
+            },
+            email2:{
+                validators:{
+                    stringLength:{
+                        min: 0,
+                        max: 100,
+                        message: 'Email ID Must Be Less Than 100 Characters Long'
+                    },
+                    regexp:{
+                        regexp: /^.+@.+\..+$/,
+                        message: 'Invalid Email ID'
+                    }
+                    
+                }
+            },
+            first_name:{
+                validators:{
+                    notEmpty:{
+                        message: 'First Name Can Not Be Empty'
+                    },
+                    stringLength:{
+                        min: 0,
+                        max: 50,
+                        message: 'First Name Must Be Less Than 50 Characters Long'
+                    },
+                    regexp:{
+                        regexp: /^[a-zA-Z.]*$/,
+                        message: 'First Name Can Contain Only a-z And A-Z'
+                    }
+                }
+            },
+            middle_name:{
+                validators:{
+                    stringLength:{
+                        min: 0,
+                        max: 50,
+                        message: 'Middle Name Must Be Less Than 50 Characters Long'
+                    },
+                    regexp:{
+                        regexp: /^[a-zA-Z.]*$/,
+                        message: 'Middle Name Can Contain Only a-z And A-Z'
+                    }
+                }
+            },
+            last_name:{
+                validators:{
+                    stringLength:{
+                        min: 0,
+                        max: 50,
+                        message: 'Last Name Must Be Less Than 50 Characters Long'
+                    },
+                    regexp:{
+                        regexp: /^[a-zA-Z.]*$/,
+                        message: 'Last Name Can Contain Only a-z And A-Z'
+                    }
+                }
+            },
+            mobile:{
+                validators:{
+                    notEmpty:{
+                        message: 'Mobile Number Can Not Be Empty'
+                    },
+                    stringLength:{
+                        min: 10,
+                        max: 10,
+                        message: 'Mobile Number Must Be 10 Digit Long'
+                    },
+                    regexp:{
+                        regexp: /^[1-9]{1,1}[0-9]{9,9}/,
+                        message: 'Invalid Mobile Number'
+                    }
+                }
+            },
+            mobile2:{
+                validators:{
+                    stringLength:{
+                        min: 10,
+                        max: 10,
+                        message: 'Mobile Number Must Be 10 Digit Long'
+                    },
+                    regexp:{
+                        regexp: /^[1-9]{1,1}[0-9]{9,9}/,
+                        message: 'Invalid Mobile Number'
+                    }
+                }
+            }
+            
+            
+        }
+
+
+    });
+
+     
+
+});
+
+
+
+
+</script>
+
 
 
 

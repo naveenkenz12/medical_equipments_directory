@@ -4,8 +4,14 @@ from django.contrib.auth.models import User
 
 # Register your models here.
 
-from medical_equipments.models import userpost
+from medical_equipments.models import equipment
 from medical_equipments.models import request_for_state_admin
+from medical_equipments.models import request_for_district_admin
+
+from medical_equipments.models import state_admin
+from medical_equipments.models import district_admin
+from medical_equipments.models import hospital
+
 
 import csv
 
@@ -14,11 +20,11 @@ from django.http import HttpResponseRedirect
 
 from django.utils.translation import ugettext_lazy as _
 
-class userpostadmin(admin.ModelAdmin):
+class equipmentadmin(admin.ModelAdmin):
 	class meta:
-		model = userpost
+		model = equipment
 
-admin.site.register(userpost,userpostadmin)
+admin.site.register(equipment,equipmentadmin)
 
 
 class state_adminregisteradmin(admin.ModelAdmin):
@@ -26,6 +32,31 @@ class state_adminregisteradmin(admin.ModelAdmin):
 		model = request_for_state_admin
 
 admin.site.register(request_for_state_admin,state_adminregisteradmin)
+
+class district_adminregisteradmin(admin.ModelAdmin):
+	class meta:
+		model = request_for_district_admin
+
+admin.site.register(request_for_district_admin,district_adminregisteradmin)
+
+class state_adminadmin(admin.ModelAdmin):
+	class meta:
+		model = state_admin
+
+admin.site.register(state_admin,state_adminadmin)
+
+
+class district_adminadmin(admin.ModelAdmin):
+	class meta:
+		model = district_admin
+
+admin.site.register(district_admin,district_adminadmin)
+
+class hospitaladmin(admin.ModelAdmin):
+	class meta:
+		model = hospital
+
+admin.site.register(hospital,hospitaladmin)
 
 
 # admin.site.unregister(User)
