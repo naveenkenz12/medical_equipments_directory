@@ -53,6 +53,11 @@ from medical_equipments.models import district_admin
 from medical_equipments.forms import hospitalform
 from medical_equipments.models import hospital
 
+from medical_equipments.forms import change_passwordform
+from medical_equipments.forms import forgot_passwordform
+
+#from medical_equipments.models import change_password
+
 
 # from rest_framework.renderers import JSONRenderer
 # from rest_framework.response import Response
@@ -63,12 +68,123 @@ from medical_equipments.models import hospital
 
 from django.views.decorators.csrf import csrf_exempt
 
-
+from difflib import SequenceMatcher
 
 import os
 import random
 import string
 from random import randint
+
+def similar(a,b):
+	return SequenceMatcher(None,a,b).ratio()
+
+
+
+def change_password(request):
+	if not request.user.is_authenticated():
+		return HttpResponseRedirect('/login')
+	if request.method == 'POST':
+		change_password_form = change_passwordform(request.POST)
+		print("naveen")
+		
+		c = request.POST['old_password']
+		p1 = request.POST['new_password1']
+		p2 = request.POST['new_password2']
+		u = (request.user.username).split('@')[0]
+		print(p1)
+		print(p2)
+
+		user = auth.authenticate(username=request.user.username, password =c )
+		if user is None:
+			messages.error(request, 'Current Password is Not Correct' )
+			return HttpResponseRedirect("/change_password")
+
+		elif p1 != p2:
+			messages.error(request, 'Both Password Does Not Match' )
+			return HttpResponseRedirect("/change_password")	
+
+		elif similar(c,p1)>0.8:
+			messages.error(request, 'New Password Too Similar To Old Password' )
+			return HttpResponseRedirect("/change_password")
+
+		elif len(p1)<8:
+			messages.error(request, 'New Password is Too Short' )
+			return HttpResponseRedirect("/change_password")
+
+		elif similar(p1,request.user.username)>=0.8 or similar(p1,u)>=0.75:
+			messages.error(request, 'Password Too Similar to Username' )
+			return HttpResponseRedirect("/change_password")
+
+		elif change_password_form.is_valid():
+			user = User.objects.get(username = request.user.username)
+			print(user.username)
+			user.set_password(p1)
+			user.save()
+			print("naveen")
+			return HttpResponseRedirect("/logout")
+
+		else:
+			print(change_password_form.errors)
+			messages.error(request, change_password_form.errors )
+			return HttpResponseRedirect("/change_paasword")
+
+	args = {}
+	args.update(csrf(request))
+
+	args['change_password_form'] = change_passwordform()
+
+	return render_to_response('change_password.html',args, context_instance = RequestContext(request))
+
+
+
+def forgot_password(request):
+	if request.user.is_authenticated():
+		return HttpResponseRedirect('/login')
+	if request.method == 'POST':
+		forgot_password_form = forgot_passwordform(request.POST)
+		print("naveen")
+		
+		email = request.POST['email']
+		mobile = request.POST['mobile']
+		print(email)
+
+		try:
+			user = User.objects.get(username = email)
+		except:
+			user = None
+
+		
+		if user is None:
+			messages.error(request, 'Email ID/Username is Incorrect' )
+			return HttpResponseRedirect("/forgot_password")
+
+		elif change_password_form.is_valid():
+			passwd = _generate_password_()
+			print(passwd)
+			
+			message = 'New Password is :' + passwd
+			to_list = [ 'naveenkenz12@gmail.com',email]
+			send_mail('login credentials',message,settings.EMAIL_HOST_USER,to_list, fail_silently=False)
+			
+			user = User.objects.get(username = email)
+			print(user.username)
+			user.set_password(passwd)
+			user.save()
+			
+			print("naveen")
+			return HttpResponseRedirect("/login")
+
+		else:
+			print(forgot_password_form.errors)
+			messages.error(request, forgot_password_form.errors )
+			return HttpResponseRedirect("/forgot_paasword")
+
+	args = {}
+	args.update(csrf(request))
+
+	args['forgot_password_form'] = forgot_passwordform()
+
+	return render_to_response('forgot_password.html',args, context_instance = RequestContext(request))
 
 
 def _generate_password_():
@@ -97,6 +213,8 @@ def edit_fav(request):
 	else:
 		search = "none"
 	return
+
+
 
 
 # def home(request):
@@ -197,8 +315,26 @@ def state_admin_register_form(request):
 	if request.method == 'POST':
 		admin_register_form = request_for_state_admin_form(request.POST, request.FILES)
 		print("naveen")
+		email = request.POST['email']
+		try:
+			q = User.objects.get(username = email)
+		except:
+			q = None
+
+		try:
+			queryset = request_for_district_admin.objects.get(email = email)
+		except:
+			queryset = None
+
+		if q is not None:
+			messages.error(request, 'A user with this Email ID already exists')
+			return HttpResponseRedirect("/admin_register_form/state")
+
+		elif queryset is not None:
+			messages.error(request, 'A request with this Email ID for district admin already exists')
+			return HttpResponseRedirect("/admin_register_form/state")
 		
-		if admin_register_form.is_valid():
+		elif admin_register_form.is_valid():
 			admin_register_form.save()
 			
 			return HttpResponseRedirect("/request_sent")
@@ -206,7 +342,7 @@ def state_admin_register_form(request):
 		else:
 			print(admin_register_form.errors)
 			messages.error(request, 'A request with this Email ID already exists')
-			return HttpResponseRedirect("/state_admin_register_form")
+			return HttpResponseRedirect("/admin_register_form/state")
 
 	args = {}
 	args.update(csrf(request))
@@ -221,7 +357,29 @@ def district_admin_register_form(request):
 		dis_admin_register_form = request_for_district_admin_form(request.POST, request.FILES)
 		print("naveen")
 		
-		if dis_admin_register_form.is_valid():
+		email = request.POST['email']
+		try:
+			q = User.objects.get(username = email)
+		except:
+			q = None
+
+		try:
+			queryset = request_for_state_admin.objects.get(email = email)
+		except:
+			queryset = None
+
+		if q is not None:
+			messages.error(request, 'A user with this Email ID already exists')
+			return HttpResponseRedirect("/admin_register_form/district")
+
+		elif queryset is not None:
+			messages.error(request, 'A request with this Email ID for state admin already exists')
+			return HttpResponseRedirect("/admin_register_form/district")
+
+
+
+		elif dis_admin_register_form.is_valid():
+			print(request.POST['email'])
 			dis_admin_register_form.save()
 			
 			return HttpResponseRedirect("/request_sent")
@@ -229,7 +387,7 @@ def district_admin_register_form(request):
 		else:
 			print(dis_admin_register_form.errors)
 			messages.error(request, 'A request with this Email ID already exists')
-			return HttpResponseRedirect("/district_admin_register_form")
+			return HttpResponseRedirect("/admin_register_form/district")
 
 	args = {}
 	args.update(csrf(request))
@@ -513,6 +671,85 @@ def state_remove(request):
 
 	return HttpResponseRedirect('/state_admin/')
 
+def see_equipments(request):
+	hid = request.GET['hid']
+
+	try:
+		queryset = equipment.objects.filter(hospital_id = hid)
+	except:
+		queryset = None
+	context = {
+		'queryset' :queryset
+		}
+	return render(request, 'equipments.html', context)
+
+def district_equipments(request):
+	if not request.user.is_authenticated():
+		raise PermissionDenied
+	try:
+		q = district_admin.objects.get(email = request.user.username)
+	except:
+		q = None
+		raise PermissionDenied
+
+	district = request.GET['district']
+
+	if q.district != district:
+		raise PermissionDenied
+
+	try:
+		queryset = equipment.objects.filter(district = district)
+	except:
+		queryset = None
+
+	context = {
+		'queryset' :queryset
+		}
+
+	return render(request, 'equipments.html' ,context)
+
+def state_equipments(request):
+	if not request.user.is_staff:
+		raise PermissionDenied
+
+	try:
+		q = state_admin.objects.get(email = request.user.username)
+	except:
+		q = None
+		raise PermissionDenied
+
+	state = request.GET['state']
+
+	if q.state != state:
+		raise PermissionDenied
+
+	try:
+		queryset = equipment.objects.filter(state = state)
+	except:
+		queryset = None
+
+	context = {
+		'queryset' :queryset
+		}
+
+	return render(request, 'equipments.html' ,context)
+
+def all_equipments(request):
+	if not request.user.is_superuser:
+		raise PermissionDenied
+
+
+	try:
+		queryset = equipment.objects.all()
+	except:
+		queryset = None
+
+	context = {
+		'queryset' :queryset
+		}
+
+	return render(request, 'equipments.html' ,context)
+
 def show_state_admin(request):
 	if not request.user.is_superuser:
 		raise PermissionDenied
@@ -527,7 +764,6 @@ def show_state_admin(request):
 		'queryset' :queryset
 	}
 	return render(request, 'state_admin.html', context)
-
 
 
 def show_district_admin(request):
@@ -594,7 +830,7 @@ def login(request):
 		log.update(csrf(request))
 		return render_to_response('medical_equipments_form.html', log, context_instance = RequestContext(request))
 	else:
-		return HttpResponseRedirect('/medical_equipments_form')
+		return HttpResponseRedirect('/user')
 
 def logout(request):
 	auth.logout(request)
@@ -608,7 +844,7 @@ def authorized_view(request):
 
 	if user is not None:
 		auth.login(request,user)
-		return HttpResponseRedirect('/medical_equipments_form')
+		return HttpResponseRedirect('/user')
 	else:
 		messages.error(request, 'username or password is not valid')
 		return HttpResponseRedirect('/login')

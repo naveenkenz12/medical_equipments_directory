@@ -7,6 +7,7 @@ from medical_equipments.models import request_for_district_admin
 from medical_equipments.models import state_admin
 from medical_equipments.models import district_admin
 from medical_equipments.models import hospital
+#from medical_equipments.models import change_password
 
 
 #from medical_equipments.models import userregister
@@ -25,6 +26,10 @@ from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
 
 from django.utils.translation import ugettext_lazy as _
+
+from captcha.fields import ReCaptchaField
+
+from nocaptcha_recaptcha.fields import NoReCaptchaField
 # from countries_states.data import Country
 # from django.db.models import Q
 
@@ -36,6 +41,24 @@ class equipmentform(forms.ModelForm):
 		
 		widgets = {'hospital_id':forms.TextInput(attrs={'placeholder':'Hospital ID','readonly':True,'class':'form-control'}),'equipment_id':forms.TextInput(attrs={'placeholder':'equipment id','class':'form-control'}),'hospital_name':forms.TextInput(attrs={'placeholder':'hospital name','class':'form-control','readonly':True}),'state':forms.TextInput(attrs={'placeholder':'state','class':'form-control','readonly':True}),'district':forms.TextInput(attrs={'placeholder':'district','class':'form-control','readonly':True}),'signed':forms.TextInput(attrs={'placeholder':'email id','readonly':True,'class':'form-control'}),}
 		
+class change_passwordform(forms.Form):
+
+	old_password = forms.CharField(widget = forms.PasswordInput , label = 'Old Password',required = True)
+	new_password1 = forms.CharField(widget = forms.PasswordInput , label = 'New Password',required = True)
+	new_password2 = forms.CharField( widget = forms.PasswordInput ,label = 'Confirm New Password',required = True)
+	captcha = NoReCaptchaField(gtag_attrs={'data-theme':'dark'})
+
+class forgot_passwordform(forms.Form):
+
+	email = forms.CharField(label = 'Email ID/Username',required = True)
+	#mobile = forms.CharField(label = 'Registered Mobile No.',required = True)
+	captcha = NoReCaptchaField(gtag_attrs={'data-theme':'dark'})
+
+
+	# class Meta:
+	# 	#model = change_password
+	# 	fields = ('old_password','new_password1','new_password2','captcha')
+	# 	widgets = {'old_password':forms.PasswordInput() , 'new_password1':forms.PasswordInput() , 'new_password2':forms.PasswordInput() , }
 
 # class userregisterform(UserCreationForm):
 # 	email = forms.EmailField(required=True)

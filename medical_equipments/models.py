@@ -17,8 +17,17 @@ class equipment(models.Model):
 	
 	signed = models.CharField(max_length = 100, verbose_name = 'Updated By')
 	
+	class Meta:
+		unique_together = ('hospital_id','equipment_id')
+
 	def __str__(self):
 		return self.equipment_id
+
+# class change_password(models.Model):
+
+# 	old_password = models.CharField(max_length = 100 , verbose_name = 'Old Password')
+# 	new_password1 = models.CharField(max_length = 100, verbose_name = 'New Password')
+# 	new_password2 = models.CharField( max_length = 250 ,verbose_name= 'Confirm New Password')
 
 
 # class userregister(models.Model):

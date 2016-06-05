@@ -12,6 +12,14 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 from .email_info import *
+from .sms_info import *
+from .captch_info import *
+
+RECAPTCHA_PUBLIC_KEY = RECAPTCHA_PUBLIC_KEY
+RECAPTCHA_PRIVATE_KEY = RECAPTCHA_PRIVATE_KEY
+
+NORECAPTCHA_SITE_KEY = NORECAPTCHA_SITE_KEY
+NORECAPTCHA_SECRET_KEY = NORECAPTCHA_SECRET_KEY
 
 EMAIL_USE_TLS = EMAIL_USE_TLS
 EMAIL_HOST = EMAIL_HOST
@@ -53,6 +61,8 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_hotp',
     'django_otp.plugins.otp_static',
     'medical_equipments',
+    'captcha',
+    'nocaptcha_recaptcha',
 ]
 
 MIDDLEWARE_CLASSES = [

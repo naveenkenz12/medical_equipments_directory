@@ -79,6 +79,21 @@ urlpatterns = [
 
     url(r'^current_hospital/' , 'medical_equipments.views.current_hospital' , name = 'current_hospital'),
 
+    url(r'^change_password/' , 'medical_equipments.views.change_password' , name = 'change_password'),
+
+    #url(r'^captcha/', include('captcha.urls')),
+
+    url(r'^forgot_password/' , 'medical_equipments.views.forgot_password' , name = 'forgot_password'),
+
+    url(r'^see_equipments/$' , 'medical_equipments.views.see_equipments' , name = 'see_equipments'),
+
+    url(r'^equipments/district/$' , 'medical_equipments.views.district_equipments' , name = 'district_equipments'),
+
+    url(r'^equipments/state/$' , 'medical_equipments.views.state_equipments' , name = 'state_equipments'),
+
+    url(r'^equipments/all/' , 'medical_equipments.views.all_equipments' , name = 'all_equipments'),
+
+
     #url(r'^home2/' , 'medical_equipments.views.home2' , name = 'home2'),    
     
     #url(r'^countries_states/$', 'countries_states.views.countries_states_view', name='countries-states'),
