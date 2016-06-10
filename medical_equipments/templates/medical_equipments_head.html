@@ -4,7 +4,10 @@
 <head>
 <title>Central Medical Equipments Directory</title>
 <!-- Bootstap CSS -->
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" >
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
+
+<link rel="stylesheet" href = "{% static 'css/jquery-ui.css' %}" />
+
 <!-- jQuery library -->
 <script src="{% static 'js/jquery.js' %}"></script>
 <!-- Latest compiled JavaScript -->
@@ -15,14 +18,32 @@
 <script src= "{% static 'js/dynamicadd.js' %}"></script>
 
 <script src = "{% static 'css/bootstrapvalidator.css' %}"> </script>
+
 <script src = "{% static 'js/bootstrapvalidator.js' %}" > </script>
 
+<script src = "{% static 'js/jquery-ui.min.js' %}" > </script>
+
 <script src = "{% static 'js/sorttable.js' %}"></script>
+
+<script type="text/javascript" src = "{% static 'js/state.js' %}" > </script>
 
 <script type="text/javascript">
     var mm={{user.username}}
 
 </script>
+
+<script>
+
+$(function() {
+    $("#id_warranty_expiry").datepicker();
+    $("#id_installation_date").datepicker();
+    $("#id_amc_upto").datepicker();
+    $("#id_not_working_since").datepicker();
+
+});
+
+</script>
+
 
 
 <script>
@@ -108,6 +129,18 @@ $(document).ready(function() {
                     regexp:{
                         regexp: /^[1-9]{1,1}[0-9]{9,9}/,
                         message: 'Invalid Mobile Number'
+                    }
+                }
+            },
+            agex:{
+                validators:{
+                    notEmpty:{
+                        message: 'Age can not be Empty'
+                    },
+                    between:{
+                        min: 0,
+                        max: 150,
+                        message: 'Invalid Age'
                     }
                 }
             }
@@ -239,6 +272,18 @@ $(document).ready(function() {
                         message: 'Invalid Mobile Number'
                     }
                 }
+            },
+            agex:{
+                validators:{
+                    notEmpty:{
+                        message: 'Age can not be Empty'
+                    },
+                    between:{
+                        min: 0,
+                        max: 150,
+                        message: 'Invalid Age'
+                    }
+                }
             }
             
             
@@ -256,7 +301,177 @@ $(document).ready(function() {
 
 </script>
 
+<script>
 
+$(document).ready(function() {
+
+    $("[id='Enter Equipment ID']").css("display","block");
+    $("[id='Not Working Since']").css("display","block");
+    $("[id='Warranty Expiry Date']").css("display","block");
+    $("[id='AMC Upto']").css("display","block");
+
+
+    $(document).on('change',"[id='Equipment id available']",function() {
+
+            var equip_id = document.getElementById("id_equipment_id_available_1").checked;
+            
+            if(equip_id == true)
+            {
+                
+                document.getElementById("id_equipment_id").value = '';
+                $("[id='Enter Equipment ID']").css("display","block");
+
+
+            }
+            else
+            {
+                document.getElementById("id_equipment_id").value = '';
+                $("[id='Enter Equipment ID']").css("display","none");
+                
+
+            }
+
+    });
+
+    $(document).on('change',"[id='Equipment in warranty']",function() {
+
+            var equip_war = document.getElementById("id_equipment_in_warranty_1").checked;
+            
+            if(equip_war == true)
+            {
+                
+                document.getElementById("id_warranty_expiry").value = '';
+                $("[id='Warranty Expiry Date']").css("display","block");
+
+
+            }
+            else
+            {
+                document.getElementById("id_warranty_expiry").value = '';
+                $("[id='Warranty Expiry Date']").css("display","none");
+                
+
+            }
+    });
+
+    $(document).on('change',"[id='Equipment Under AMC/CMC']",function() {
+
+            var equip_amc = document.getElementById("id_equipment_under_AMC_CMC_1").checked;
+            
+            if(equip_amc == true)
+            {
+                
+                document.getElementById("id_amc_upto").value = '';
+                $("[id='AMC Upto']").css("display","block");
+
+
+            }
+            else
+            {
+                document.getElementById("id_amc_upto").value = '';
+                $("[id='AMC Upto']").css("display","none");
+                
+
+            }
+    });
+
+    $(document).on('change',"[id='Working condition']",function() {
+
+            var equip_cond = document.getElementById("id_working_condition_1").checked;
+            
+            if(equip_cond == true)
+            {
+                
+                document.getElementById("id_not_working_since").value = '';
+                $("[id='Not Working Since']").css("display","block");
+
+
+            }
+            else
+            {
+                document.getElementById("id_not_working_since").value = '';
+                $("[id='Not Working Since']").css("display","none");
+                
+
+            }
+    });
+});
+
+
+</script>
+
+
+
+<script>
+
+$(document).ready(function() {
+
+    $("[id='Enter Hospital ID']").css("display","block");
+   
+    $(document).on('change',"[id='Hospital ID Available']",function() {
+
+            var hosp_id = document.getElementById("id_hospital_id_available_1").checked;
+            
+            if(hosp_id == true)
+            {
+                
+                document.getElementById("id_hospital_id").value = '';
+                $("[id='Enter Hospital ID']").css("display","block");
+
+
+            }
+            else
+            {
+                document.getElementById("id_hospital_id").value = '';
+                $("[id='Enter Hospital ID']").css("display","none");
+                
+
+            }
+    });
+
+   
+});
+
+
+</script>
+
+
+<!-- <script>
+
+$(document).ready(function(){
+
+   
+
+$(document).on('change',"#id_state",function(){
+
+    if(($('#id_state').val()) == 'Andaman and Nicobar Islands')
+    {
+        var x = document.getElementById("id_district");
+        for(var i=x.length - 1;i>=3;i--)
+        {
+            x.remove(i);
+        }
+        var option = document.createElement("option");
+        option.text = "KIv";
+        option.value = "KIv"
+        x.add(option);
+        
+
+    }
+
+    else if(($('#id_state').val()) == 'Andhra Pradesh')
+    {
+        var x = document.getElementById("id_district");
+        for(var i=x.length - 1;i>=25;i--)
+        {
+            x.remove(i);
+        }
+    }
+
+});
+
+});
+</script> -->
 
 
 

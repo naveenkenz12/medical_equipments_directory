@@ -41,7 +41,7 @@ table#t01 th  {
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                                 
       </button>
-      <a class="navbar-brand">Central Medical Equipments Directory</a>
+      <a class="navbar-brand" href = "/">Central Medical Equipments Directory</a>
     </div>
 
 
@@ -52,8 +52,18 @@ table#t01 th  {
 
 
         {% if user.is_authenticated %}
+        <li><a href="/register_hospital"><span class="glyphicon "></span>Add Hospital</a></li>
         
-        <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/user">Profile</a></li>
+                <li><a href="/change_password">Change Password</a></li>
+               
+                
+              </ul>
+            </li>
 
         <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
 
@@ -72,10 +82,15 @@ table#t01 th  {
             
 
 
-<table class="sortable">
+<div class="container" align="center">
+<div align="center">
+  <h3>List of Registerd Hospitals</h3>
+</div>
+<table class="sortable" class="table table-hover table-bordered table-striped table-condensed">
   <tr>
     <th>Hospital ID</th>
-    <th>Hospital Name</th>    
+    <th>Hospital Name</th>  
+    <th>Govt./Private</th>  
     <th>Hospital Type</th>
     <th>Contact</th>
     <th>Address</th>
@@ -89,7 +104,7 @@ table#t01 th  {
   <tr>
   <th>
     <form method="POST">{% csrf_token %}
-    <a href='/medical_equipments_form?hid={{ x.hospital_id }}'>{{ x.hospital_id }}</a>
+    <a href='/see_equipments?hid={{ x.hospital_id }}'>{{ x.hospital_id }}</a>
 
     </form>
 
@@ -97,6 +112,7 @@ table#t01 th  {
   </th>
   <th>{{ x.hospital_name }}</th>
   <th>{{ x.hospital_type }}</th>
+  <th>{{ x.hospital_cat }}</th>
   <th>{{ x.mobile }}</th>
   <th>{{ x.address }}</th>
   <th>{{ x.pincode }}</th>
@@ -110,6 +126,7 @@ table#t01 th  {
   {% endfor %}
 
 </table>
+</div>
 
  {% endif %}
 

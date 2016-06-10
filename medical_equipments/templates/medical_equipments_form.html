@@ -6,6 +6,26 @@
 
 {% include 'medical_equipments_head.html' %}
 
+<!-- <script type="text/javascript">
+
+window.onload = function() {
+  var equip_id_0 = document.getElementById('id_equipment_id_available_0');
+  var equip_id_1 = document.getElementById('id_equipment_id_available_1');
+
+    equip_id_0.onclick = handler1;
+    equip_id_1.onclick = handler2;
+
+    function handler1() {
+
+    }
+}
+
+
+</script> -->
+
+
+
+
 
 <body>
 
@@ -16,7 +36,7 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                                 
       </button>
-      <a class="navbar-brand">Central Medical Equipments Directory</a>
+      <a class="navbar-brand" href ="/" >Central Medical Equipments Directory</a>
     </div>
 
 
@@ -30,10 +50,30 @@
 
         <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
 
+         <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Register <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin_register_form/country">Country (except India)</a></li>
+                <li><a href="/admin_register_form/state">Indian States</a></li>
+                <li><a href="/admin_register_form/district">Indian Districts</a></li>
+                
+              </ul>
+            </li>
+
         {% endif %}
 
         {% if user.is_authenticated %}
-        <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+        <li><a href="/current_hospital"><span class="glyphicon "></span>Current Hospitals</a></li>
+        
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/user">Profile</a></li>
+                <li><a href="/change_password">Change Password</a></li>
+               
+                
+              </ul>
+            </li>
 
         <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
 
@@ -50,22 +90,22 @@
 <br><br>
 <form class = "form-horizontal" method ="post" action = "{% url 'authorized_view' %}"> {% csrf_token %}
 <div class ="form-group">
-   <label class="control-label col-md-4">username</label>
-<div class="col-md-4">
+   <label class="control-label col-md-5">username</label>
+<div class="col-md-3">
 <input type = "text" class = "form-control" placeholder = "username" name = "username">
    </div>
    </div>
 
 <div class ="form-group">
-    <label class="control-label col-md-4">Password</label>
-    <div class="col-md-4 selectContainer">
+    <label class="control-label col-md-5">Password</label>
+    <div class="col-md-3 selectContainer">
     <input type = "password" class = "form-control" placeholder = "password" name = "password">   
     </div>
     </div>
 
 <div class ="form-group" >
 <label class="control-label col-sm-10">
-<div class="col-sm-6 selectContainer">
+<div class="col-sm-8 selectContainer">
 <a href='/forgot_password'>forgot password</a>
 </div>
 </label>

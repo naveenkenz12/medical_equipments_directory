@@ -8,14 +8,76 @@ from django.utils.translation import ugettext_lazy as _
 
 class equipment(models.Model):
 
+	yes = 'Yes'
+	no = 'No'
+
+	working = 'Working'
+	not_working = 'Not Working'
+
+	WORKING_LIST = ((working,working),(not_working,not_working),)
+
+	YES_NO_LIST = ((no,no),(yes,yes),)
+
+	sur = 'Surgical/Operation Theater(OT)'
+	lab = 'Laboratory'
+	rad = 'radiology'
+	den = 'Dental'
+	ent = 'ENT'
+	ste = 'Sterlization Equipment'
+	phy = 'Physiotherapy and Rehabilation'
+	eme = 'Emergency'
+	end = 'Endoscopy/Laparoscopy'
+	car = 'Cardiology'
+	blo = 'Blood Bank'
+	mat = 'Maternal and Child Care'
+	oph = 'Ophthalmology'
+	out = 'Out Patient Department(OPD)'
+	icu = 'Interiar Care Unit(ICU)'
+	oth = 'Others'
+
+	CATEGORY_LIST = ((sur,sur),(lab,lab),(rad,rad),(den,den),(ent,ent),(ste,ste),
+					(phy,phy),(eme,eme),(end,end),(car,car),(blo,blo),(mat,mat),
+					(oph,oph),(out,out),(icu,icu),(oth,oth),)
+
 	hospital_id = models.CharField(max_length = 100 , verbose_name = 'Hospital ID')
-	equipment_id = models.CharField(max_length = 100, verbose_name = 'Equipment ID')
+	equipment_id_available = models.CharField(max_length = 3, verbose_name = 'Equipment ID Available', choices=YES_NO_LIST)
+
+	equipment_id = models.CharField(max_length = 100, verbose_name = 'Equipment ID',null=True, blank = True)
+
+	equipment_category = models.CharField(max_length = 40, verbose_name = 'Equipment Category',choices=CATEGORY_LIST)
+
+	equipment_name = models.CharField(max_length = 100, verbose_name = 'Equipment Name')
+
+	equipment_in_warranty = models.CharField(max_length = 3,verbose_name='Warranty Status', choices=YES_NO_LIST)
+
+	warranty_expiry = models.CharField(max_length = 15, verbose_name='Warranty Expiry Date', null=True, blank=True)
+
+	equipment_model = models.CharField(max_length = 100, verbose_name='Equipment Model',null=True, blank=True)
+
+	manufacturar = models.CharField(max_length = 100, verbose_name='Manufacturar', null=True, blank=True)
+
+	installation_date = models.CharField(max_length = 15,verbose_name = 'Date of Installation',null=True, blank=True)
+
+	equipment_under_AMC_CMC = models.CharField(max_length = 3,verbose_name='Under AMC/CMC', choices=YES_NO_LIST)
+
+	amc_upto = models.CharField(max_length = 15,verbose_name='AMC Upto',null=True, blank=True)
+
+	working_condition = models.CharField(max_length = 12,verbose_name='Working Condition',choices=WORKING_LIST)
+
+	not_working_since = models.CharField(max_length = 15,verbose_name='Not Working Since',null=True,blank=True)
+
+	remarks = models.CharField(max_length = 500,verbose_name='Remarks',null=True,blank=True)
+
 	hospital_name = models.CharField( max_length = 250 ,verbose_name='Hospital Name')
 
-	state = models.CharField(max_length = 30, verbose_name = 'State')
-	district = models.CharField(max_length = 100, verbose_name = 'District')
-	
+	state = models.CharField(max_length = 30, verbose_name = 'State',null=True, blank=True)
+	district = models.CharField(max_length = 100, verbose_name = 'District' , null=True, blank=True)
+	country = models.CharField(max_length = 100,verbose_name='Country')
 	signed = models.CharField(max_length = 100, verbose_name = 'Updated By')
+
+	date_created = models.DateTimeField(auto_now_add = True)
+
+	date_modified = models.DateTimeField(auto_now = True)
 	
 	class Meta:
 		unique_together = ('hospital_id','equipment_id')
@@ -47,17 +109,33 @@ class hospital(models.Model):
 	govt = 'Government'
 	private = 'Private'
 
+	yes = 'Yes'
+	no = 'No'
+
+	primary = 'Primary'
+	secondary = 'Secondary'
+	tertiary = 'Tertiary'
+
+	TYPE_CAT = ((primary,primary),(secondary,secondary),(tertiary,tertiary),)
+
+	YES_NO_LIST = ((no,no),(yes,yes),)
+
 	TYPE_LIST = ((govt,govt),(private,private),)
 
-	hospital_id = models.CharField(max_length = 100, verbose_name = 'Hospital ID')
+	hospital_id_available = models.CharField(max_length = 3, verbose_name = 'Hospital ID', choices=YES_NO_LIST)
+
+	hospital_id = models.CharField(max_length = 100, verbose_name = 'Enter Hospital ID',null=True, blank=True)
 	hospital_name = models.CharField(max_length = 250, verbose_name = 'Hospital Name')
 	hospital_type = models.CharField(max_length = 50, verbose_name = 'Category' , choices=TYPE_LIST)
+	hospital_cat = models.CharField(max_length = 20, verbose_name = 'Hospital Type', choices=TYPE_CAT)
 	email = models.EmailField(max_length = 100, verbose_name = 'Email ID')
 	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile Number')
 	address = models.CharField(max_length = 600, verbose_name = 'Address')
-	state = models.CharField(max_length = 30, verbose_name = 'State')
-	district = models.CharField(max_length = 100, verbose_name = 'District')
-	pincode = models.CharField(max_length = 12, verbose_name = 'Pin Code')
+	state = models.CharField(max_length = 30, verbose_name = 'State',null=True, blank=True)
+	country = models.CharField(max_length = 100, verbose_name = 'Country')
+
+	district = models.CharField(max_length = 100, verbose_name = 'District',null=True,blank=True)
+	pincode = models.CharField(max_length = 12, verbose_name = 'Pin Code/Zip Code')
 
 	def __str__(self):
 		return self.hospital_id
@@ -68,6 +146,272 @@ def generate_filename(self, filename):
 	url = "files/users/%s/%s/%s" % (self.state,self.mobile ,filename)
 	print("file")
 	return url
+
+class request_for_country_admin(models.Model):
+	afghanistan = 'Afghanistan'
+	albania = 'Albania'
+	algeria = 'Algeria'
+	andorra = 'Andorra'
+	angola = 'Angola'
+	antiguaandbarbuda = 'Antigua and Barbuda'
+	argentina = 'Argentina'
+	armenia = 'Armenia'
+	australia = 'Australia'
+	austria = 'Austria'
+	azerbaijan = 'Azerbaijan'
+	bahamas = 'Bahamas'
+	bahrain = 'Bahrain'
+	bangladesh = 'Bangladesh'
+	barbados = 'Barbados'
+	belarus = 'Belarus'
+	belgium = 'Belgium'
+	belize = 'Belize'
+	benin = 'Benin'
+	bhutan = 'Bhutan'
+	bolivia = 'Bolivia'
+	bosniaandherzegovina = 'Bosnia and Herzegovina'
+	botswana = 'Botswana'
+	brazil = 'Brazil'
+	brunei = 'Brunei'
+	bulgaria = 'Bulgaria'
+	burkinafaso = 'Burkina Faso'
+	burundi = 'Burundi'
+	caboverde = 'Cabo Verde'
+	cambodia = 'Cambodia'
+	cameroon = 'Cameroon'
+	canada = 'Canada'
+	centralafricanrepublic = 'Central African Republic'
+	chad = 'Chad'
+	chile = 'Chile'
+	china = 'China'
+	colombia = 'Colombia'
+	comoros = 'Comoros'
+	congorepublicofthe = 'Congo, Republic of the'
+	congodemocraticrepublicofthe = 'Congo, Democratic Republic of the'
+	costarica = 'Costa Rica'
+	cotedivoire = "Cote d'Ivoire"
+	croatia = 'Croatia'
+	cuba = 'Cuba'
+	cyprus = 'Cyprus'
+	czechrepublic = 'Czech Republic'
+	denmark = 'Denmark'
+	djibouti = 'Djibouti'
+	dominica = 'Dominica'
+	dominicanrepublic = 'Dominican Republic'
+	ecuador = 'Ecuador'
+	egypt = 'Egypt'
+	elsalvador = 'El Salvador'
+	equatorialguinea = 'Equatorial Guinea'
+	eritrea = 'Eritrea'
+	estonia = 'Estonia'
+	ethiopia = 'Ethiopia'
+	fiji = 'Fiji'
+	finland = 'Finland'
+	france = 'France'
+	gabon = 'Gabon'
+	gambia = 'Gambia'
+	georgia = 'Georgia'
+	germany = 'Germany'
+	ghana = 'Ghana'
+	greece = 'Greece'
+	grenada = 'Grenada'
+	guatemala = 'Guatemala'
+	guinea = 'Guinea'
+	guineabissau = 'Guinea-Bissau'
+	guyana = 'Guyana'
+	haiti = 'Haiti'
+	honduras = 'Honduras'
+	hungary = 'Hungary'
+	iceland = 'Iceland'
+	indonesia = 'Indonesia'
+	iran = 'Iran'
+	iraq = 'Iraq'
+	ireland = 'Ireland'
+	israel = 'Israel'
+	italy = 'Italy'
+	jamaica = 'Jamaica'
+	japan = 'Japan'
+	jordan = 'Jordan'
+	kazakhstan = 'Kazakhstan'
+	kenya = 'Kenya'
+	kiribati = 'Kiribati'
+	kosovo = 'Kosovo'
+	kuwait = 'Kuwait'
+	kyrgyzstan = 'Kyrgyzstan'
+	laos = 'Laos'
+	latvia = 'Latvia'
+	lebanon = 'Lebanon'
+	lesotho = 'Lesotho'
+	liberia = 'Liberia'
+	libya = 'Libya'
+	liechtenstein = 'Liechtenstein'
+	lithuania = 'Lithuania'
+	luxembourg = 'Luxembourg'
+	macedonia = 'Macedonia'
+	madagascar = 'Madagascar'
+	malawi = 'Malawi'
+	malaysia = 'Malaysia'
+	maldives = 'Maldives'
+	mali = 'Mali'
+	malta = 'Malta'
+	marshallislands = 'Marshall Islands'
+	mauritania = 'Mauritania'
+	mauritius = 'Mauritius'
+	mexico = 'Mexico'
+	micronesia = 'Micronesia'
+	moldova = 'Moldova'
+	monaco = 'Monaco'
+	mongolia = 'Mongolia'
+	montenegro = 'Montenegro'
+	morocco = 'Morocco'
+	mozambique = 'Mozambique'
+	myanmarburma = 'Myanmar (Burma)'
+	namibia = 'Namibia'
+	nauru = 'Nauru'
+	nepal = 'Nepal'
+	netherlands = 'Netherlands'
+	newzealand = 'New Zealand'
+	nicaragua = 'Nicaragua'
+	niger = 'Niger'
+	nigeria = 'Nigeria'
+	northkorea = 'North Korea'
+	norway = 'Norway'
+	oman = 'Oman'
+	pakistan = 'Pakistan'
+	palau = 'Palau'
+	palestine = 'Palestine'
+	panama = 'Panama'
+	papuanewguinea = 'Papua New Guinea'
+	paraguay = 'Paraguay'
+	peru = 'Peru'
+	philippines = 'Philippines'
+	poland = 'Poland'
+	portugal = 'Portugal'
+	qatar = 'Qatar'
+	romania = 'Romania'
+	russia = 'Russia'
+	rwanda = 'Rwanda'
+	stkittsandnevis = 'St. Kitts and Nevis '
+	stlucia = 'St. Lucia'
+	stvincentandthegrenadines = 'St. Vincent and The Grenadines '
+	samoa = 'Samoa'
+	sanmarino = 'San Marino'
+	saotomeandprincipe = 'Sao Tome and Principe '
+	saudiarabia = 'Saudi Arabia'
+	senegal = 'Senegal'
+	serbia = 'Serbia'
+	seychelles = 'Seychelles'
+	sierraleone = 'Sierra Leone'
+	singapore = 'Singapore'
+	slovakia = 'Slovakia'
+	slovenia = 'Slovenia'
+	solomonislands = 'Solomon Islands'
+	somalia = 'Somalia'
+	southafrica = 'South Africa'
+	southkorea = 'South Korea'
+	southsudan = 'South Sudan'
+	spain = 'Spain'
+	srilanka = 'Sri Lanka'
+	sudan = 'Sudan'
+	suriname = 'Suriname'
+	swaziland = 'Swaziland'
+	sweden = 'Sweden'
+	switzerland = 'Switzerland'
+	syria = 'Syria'
+	taiwan = 'Taiwan'
+	tajikistan = 'Tajikistan'
+	tanzania = 'Tanzania'
+	thailand = 'Thailand'
+	timorleste = 'Timor-Leste'
+	togo = 'Togo'
+	tonga = 'Tonga'
+	trinidadandtobago = 'Trinidad and Tobago'
+	tunisia = 'Tunisia'
+	turkey = 'Turkey'
+	turkmenistan = 'Turkmenistan'
+	tuvalu = 'Tuvalu'
+	uganda = 'Uganda'
+	ukraine = 'Ukraine'
+	unitedarabemirates = 'United Arab Emirates'
+	unitedkingdomuk = 'United Kingdom (UK)'
+	unitedstatesofamericausa = 'United States of America (USA)'
+	uruguay = 'Uruguay'
+	uzbekistan = 'Uzbekistan'
+	vanuatu = 'Vanuatu'
+	vaticancityholysee = 'Vatican City (Holy See)'
+	venezuela = 'Venezuela'
+	vietnam = 'Vietnam'
+	yemen = 'Yemen'
+	zambia = 'Zambia'
+	zimbabwe = 'Zimbabwe'
+	
+
+	n_a = 'N/A'
+	male = 'Male'
+	female = 'Female'
+
+	post_graduate = 'POST_GRADUATE'
+	graduate = 'Graduate'
+	vocational = 'Vocational'
+	higher_secondary = 'Higher Secondary'
+	secondary = 'Secondary'
+	elementary = 'Elementary'
+
+	EDUCATION_LIST = ((post_graduate,post_graduate),(graduate,graduate),(vocational,vocational),(higher_secondary,higher_secondary),(secondary,secondary),(elementary,elementary),)
+
+	GENDER_LIST = ((n_a,n_a),(male,male),(female,female),)
+
+	COUNTRY_LIST = ((afghanistan,afghanistan),(albania,albania),(algeria,algeria),(andorra,andorra),(angola,angola),(antiguaandbarbuda,antiguaandbarbuda),(argentina,argentina),(armenia,armenia),(australia,australia),(austria,austria),(azerbaijan,azerbaijan),(bahamas,bahamas),(bahrain,bahrain),(bangladesh,bangladesh),(barbados,barbados),(belarus,belarus),(belgium,belgium),(belize,belize),(benin,benin),(bhutan,bhutan),(bolivia,bolivia),(bosniaandherzegovina,bosniaandherzegovina),(botswana,botswana),(brazil,brazil),(brunei,brunei),(bulgaria,bulgaria),(burkinafaso,burkinafaso),(burundi,burundi),(caboverde,caboverde),(cambodia,cambodia),(cameroon,cameroon),(canada,canada),(centralafricanrepublic,centralafricanrepublic),(chad,chad),(chile,chile),(china,china),(colombia,colombia),(comoros,comoros),(congorepublicofthe,congorepublicofthe),(congodemocraticrepublicofthe,congodemocraticrepublicofthe),(costarica,costarica),(cotedivoire,cotedivoire),(croatia,croatia),(cuba,cuba),(cyprus,cyprus),(czechrepublic,czechrepublic),(denmark,denmark),(djibouti,djibouti),(dominica,dominica),(dominicanrepublic,dominicanrepublic),(ecuador,ecuador),(egypt,egypt),(elsalvador,elsalvador),(equatorialguinea,equatorialguinea),(eritrea,eritrea),(estonia,estonia),(ethiopia,ethiopia),(fiji,fiji),(finland,finland),(france,france),(gabon,gabon),(gambia,gambia),(georgia,georgia),(germany,germany),(ghana,ghana),(greece,greece),(grenada,grenada),(guatemala,guatemala),(guinea,guinea),(guineabissau,guineabissau),(guyana,guyana),(haiti,haiti),(honduras,honduras),(hungary,hungary),(iceland,iceland),(indonesia,indonesia),(iran,iran),(iraq,iraq),(ireland,ireland),(israel,israel),(italy,italy),(jamaica,jamaica),(japan,japan),(jordan,jordan),(kazakhstan,kazakhstan),(kenya,kenya),(kiribati,kiribati),(kosovo,kosovo),(kuwait,kuwait),(kyrgyzstan,kyrgyzstan),(laos,laos),(latvia,latvia),(lebanon,lebanon),(lesotho,lesotho),(liberia,liberia),(libya,libya),(liechtenstein,liechtenstein),(lithuania,lithuania),(luxembourg,luxembourg),(macedonia,macedonia),(madagascar,madagascar),(malawi,malawi),(malaysia,malaysia),(maldives,maldives),(mali,mali),(malta,malta),(marshallislands,marshallislands),(mauritania,mauritania),(mauritius,mauritius),(mexico,mexico),(micronesia,micronesia),(moldova,moldova),(monaco,monaco),(mongolia,mongolia),(montenegro,montenegro),(morocco,morocco),(mozambique,mozambique),(myanmarburma,myanmarburma),(namibia,namibia),(nauru,nauru),(nepal,nepal),(netherlands,netherlands),(newzealand,newzealand),(nicaragua,nicaragua),(niger,niger),(nigeria,nigeria),(northkorea,northkorea),(norway,norway),(oman,oman),(pakistan,pakistan),(palau,palau),(palestine,palestine),(panama,panama),(papuanewguinea,papuanewguinea),(paraguay,paraguay),(peru,peru),(philippines,philippines),(poland,poland),(portugal,portugal),(qatar,qatar),(romania,romania),(russia,russia),(rwanda,rwanda),(stkittsandnevis,stkittsandnevis),(stlucia,stlucia),(stvincentandthegrenadines,stvincentandthegrenadines),(samoa,samoa),(sanmarino,sanmarino),(saotomeandprincipe,saotomeandprincipe),(saudiarabia,saudiarabia),(senegal,senegal),(serbia,serbia),(seychelles,seychelles),(sierraleone,sierraleone),(singapore,singapore),(slovakia,slovakia),(slovenia,slovenia),(solomonislands,solomonislands),(somalia,somalia),(southafrica,southafrica),(southkorea,southkorea),(southsudan,southsudan),(spain,spain),(srilanka,srilanka),(sudan,sudan),(suriname,suriname),(swaziland,swaziland),(sweden,sweden),(switzerland,switzerland),(syria,syria),(taiwan,taiwan),(tajikistan,tajikistan),(tanzania,tanzania),(thailand,thailand),(timorleste,timorleste),(togo,togo),(tonga,tonga),(trinidadandtobago,trinidadandtobago),(tunisia,tunisia),(turkey,turkey),(turkmenistan,turkmenistan),(tuvalu,tuvalu),(uganda,uganda),(ukraine,ukraine),(unitedarabemirates,unitedarabemirates),(unitedkingdomuk,unitedkingdomuk),(unitedstatesofamericausa,unitedstatesofamericausa),(uruguay,uruguay),(uzbekistan,uzbekistan),(vanuatu,vanuatu),(vaticancityholysee,vaticancityholysee),(venezuela,venezuela),(vietnam,vietnam),(yemen,yemen),(zambia,zambia),(zimbabwe,zimbabwe),)
+
+	email = models.EmailField(max_length = 100, verbose_name = 'Email ID', unique=True)
+	first_name = models.CharField(max_length = 50, verbose_name = 'First Name')
+	middle_name = models.CharField(max_length = 50, verbose_name = 'Middle Name', null=True, blank=True)
+	last_name = models.CharField(max_length = 50, verbose_name = 'Last Name', null=True, blank=True)
+	country = models.CharField(max_length = 50,verbose_name = 'Country', choices = COUNTRY_LIST )
+
+	agex = models.DecimalField(max_digits = 3, decimal_places = 0, verbose_name = 'Age')
+
+	gender = models.CharField(max_length = 6,verbose_name = 'Gender' , choices = GENDER_LIST)
+
+	education = models.CharField(max_length = 50, verbose_name = 'Education' , choices = EDUCATION_LIST)
+
+	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile No' )
+
+	file = models.FileField(verbose_name = 'Related documents' , upload_to = generate_filename , null=True, blank=True)
+
+	# class Meta:
+	# 	unique_together = ('email' , 'state')
+
+	def __str__(self):
+		return self.email
+
+class country_admin(models.Model):
+	
+	email = models.EmailField(max_length = 100, verbose_name = 'Email ID/Username', unique=True)
+	email2 = models.EmailField(max_length = 100, verbose_name = 'Alternate Email ID' , null =True, blank = True)
+	first_name = models.CharField(max_length = 50, verbose_name = 'First Name')
+	middle_name = models.CharField(max_length = 50, verbose_name = 'Middle Name', null=True, blank=True)
+	last_name = models.CharField(max_length = 50, verbose_name = 'Last Name', null=True, blank=True)
+	country = models.CharField(max_length = 50,verbose_name = 'Country' )
+
+	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile No' )
+	mobile2 = models.CharField(max_length = 10, verbose_name = 'Alernate Mobile No', null=True, blank=True)
+
+	agex = models.DecimalField(max_digits = 3, decimal_places = 0, verbose_name = 'Age')
+
+	gender = models.CharField(max_length = 6,verbose_name = 'Gender')
+
+	education = models.CharField(max_length = 50, verbose_name = 'Education')
+
+	address = models.CharField(max_length = 500, verbose_name= 'Address' , null=True, blank=True)
+
+	file = models.FileField(verbose_name = 'Related documents' , upload_to = generate_filename , null=True, blank=True)
+
+	# class Meta:
+	# 	unique_together = ('email' , 'state')
+
+	def __str__(self):
+		return self.email
 
 class request_for_state_admin(models.Model):
 	
@@ -108,13 +452,39 @@ class request_for_state_admin(models.Model):
 	uttarakhand = 'Uttarakhand'
 	west = 'West Bengal'
 
+	india = 'India'
+
+	COUNTRY_LIST = ((india,india),)
+
+	n_a = 'N/A'
+	male = 'Male'
+	female = 'Female'
+
+	post_graduate = 'POST_GRADUATE'
+	graduate = 'Graduate'
+	vocational = 'Vocational'
+	higher_secondary = 'Higher Secondary'
+	secondary = 'Secondary'
+	elementary = 'Elementary'
+
+	EDUCATION_LIST = ((post_graduate,post_graduate),(graduate,graduate),(vocational,vocational),(higher_secondary,higher_secondary),(secondary,secondary),(elementary,elementary),)
+
+	GENDER_LIST = ((n_a,n_a),(male,male),(female,female),)
+
 	STATE_LIST = ((andaman,andaman),(andhra,andhra),(arunachal,arunachal),(assam,assam),(bihar,bihar),(chandigarh,chandigarh),(chattisgarh,chattisgarh),(dadra,dadra),(daman,daman),(delhi,delhi),(goa,goa),(gujrat,gujrat),(haryana,haryana),(himachal,himachal),(jammu,jammu),(jharkhand,jharkhand),(karnataka,karnataka),(kerala,kerala),(lakshadweep,lakshadweep),(madhya,madhya),(maharashtra,maharashtra),(manipur,manipur),(meghalaya,meghalaya),(mizoram,mizoram),(nagaland,nagaland),(odisha,odisha),(puducherry,puducherry),(punjab,punjab),(rajasthan,rajasthan),(sikkim,sikkim),(tamil,tamil),(telangana,telangana),(tripura,tripura),(uttar,uttar),(uttarakhand,uttarakhand),(west,west),)
 
 	email = models.EmailField(max_length = 100, verbose_name = 'Email ID', unique=True)
 	first_name = models.CharField(max_length = 50, verbose_name = 'First Name')
 	middle_name = models.CharField(max_length = 50, verbose_name = 'Middle Name', null=True, blank=True)
 	last_name = models.CharField(max_length = 50, verbose_name = 'Last Name', null=True, blank=True)
+	country = models.CharField(max_length = 10, verbose_name = 'Country', choices = COUNTRY_LIST)
 	state = models.CharField(max_length = 30,verbose_name = 'State', choices = STATE_LIST )
+
+	agex = models.DecimalField(max_digits = 3, decimal_places = 0, verbose_name = 'Age')
+
+	gender = models.CharField(max_length = 6,verbose_name = 'Gender' , choices = GENDER_LIST)
+
+	education = models.CharField(max_length = 50, verbose_name = 'Education' , choices = EDUCATION_LIST)
 
 	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile No' )
 
@@ -134,10 +504,18 @@ class state_admin(models.Model):
 	first_name = models.CharField(max_length = 50, verbose_name = 'First Name')
 	middle_name = models.CharField(max_length = 50, verbose_name = 'Middle Name', null=True, blank=True)
 	last_name = models.CharField(max_length = 50, verbose_name = 'Last Name', null=True, blank=True)
+	country = models.CharField(max_length = 10,verbose_name = 'Country' )
+	
 	state = models.CharField(max_length = 30,verbose_name = 'State' )
 
 	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile No' )
 	mobile2 = models.CharField(max_length = 10, verbose_name = 'Alernate Mobile No', null=True, blank=True)
+
+	agex = models.DecimalField(max_digits = 3, decimal_places = 0, verbose_name = 'Age')
+
+	gender = models.CharField(max_length = 6,verbose_name = 'Gender')
+
+	education = models.CharField(max_length = 50, verbose_name = 'Education')
 
 	address = models.CharField(max_length = 500, verbose_name= 'Address' , null=True, blank=True)
 
@@ -881,17 +1259,43 @@ class request_for_district_admin(models.Model):
 	
 	STATE_LIST = ((andaman,andaman),(andhra,andhra),(arunachal,arunachal),(assam,assam),(bihar,bihar),(chandigarh,chandigarh),(chattisgarh,chattisgarh),(dadra,dadra),(daman,daman),(delhi,delhi),(goa,goa),(gujrat,gujrat),(haryana,haryana),(himachal,himachal),(jammu,jammu),(jharkhand,jharkhand),(karnataka,karnataka),(kerala,kerala),(lakshadweep,lakshadweep),(madhya,madhya),(maharashtra,maharashtra),(manipur,manipur),(meghalaya,meghalaya),(mizoram,mizoram),(nagaland,nagaland),(odisha,odisha),(puducherry,puducherry),(punjab,punjab),(rajasthan,rajasthan),(sikkim,sikkim),(tamil,tamil),(telangana,telangana),(tripura,tripura),(uttar,uttar),(uttarakhand,uttarakhand),(west,west),)
 	
+	n_a = 'N/A'
+	male = 'Male'
+	female = 'Female'
+
+	india = 'India'
+
+	COUNTRY_LIST = ((india,india),)
+
+	post_graduate = 'POST_GRADUATE'
+	graduate = 'Graduate'
+	vocational = 'Vocational'
+	higher_secondary = 'Higher Secondary'
+	secondary = 'Secondary'
+	elementary = 'Elementary'
+
+	EDUCATION_LIST = ((post_graduate,post_graduate),(graduate,graduate),(vocational,vocational),(higher_secondary,higher_secondary),(secondary,secondary),(elementary,elementary),)
+
+	GENDER_LIST = ((n_a,n_a),(male,male),(female,female),)
 	
 	
 	email = models.EmailField(max_length = 100, verbose_name = 'Email ID', unique=True)
 	first_name = models.CharField(max_length = 50, verbose_name = 'First Name')
 	middle_name = models.CharField(max_length = 50, verbose_name = 'Middle Name', null=True, blank=True)
 	last_name = models.CharField(max_length = 50, verbose_name = 'Last Name', null=True, blank=True)
+	country = models.CharField(max_length = 10,verbose_name = 'Country', choices = COUNTRY_LIST )
+	
 	state = models.CharField(max_length = 30,verbose_name = 'State', choices = STATE_LIST )
 
 	district = models.CharField(max_length = 30,verbose_name = 'District', choices = DISTRICT_LIST )
 
 	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile No' )
+
+	agex = models.DecimalField(max_digits = 3, decimal_places = 0, verbose_name = 'Age')
+
+	gender = models.CharField(max_length = 6,verbose_name = 'Gender' , choices = GENDER_LIST)
+
+	education = models.CharField(max_length = 50, verbose_name = 'Education' , choices = EDUCATION_LIST)
 
 	file = models.FileField(verbose_name = 'Related documents' , upload_to = generate_filename , null=True, blank=True)
 
@@ -909,11 +1313,19 @@ class district_admin(models.Model):
 	first_name = models.CharField(max_length = 50, verbose_name = 'First Name')
 	middle_name = models.CharField(max_length = 50, verbose_name = 'Middle Name', null=True, blank=True)
 	last_name = models.CharField(max_length = 50, verbose_name = 'Last Name', null=True, blank=True)
+	country = models.CharField(max_length = 10,verbose_name = 'Country' )
+	
 	state = models.CharField(max_length = 30,verbose_name = 'State' )
 	district = models.CharField(max_length = 100, verbose_name = 'District')
 
 	mobile = models.CharField(max_length = 10, verbose_name = 'Mobile No' )
 	mobile2 = models.CharField(max_length = 10, verbose_name = 'Alernate Mobile No', null=True, blank=True)
+
+	agex = models.DecimalField(max_digits = 3, decimal_places = 0, verbose_name = 'Age')
+
+	gender = models.CharField(max_length = 6,verbose_name = 'Gender' )
+
+	education = models.CharField(max_length = 50, verbose_name = 'Education' )
 
 	address = models.CharField(max_length = 500, verbose_name= 'Address' , null=True, blank=True)
 

@@ -1,0 +1,143 @@
+{% if user.is_superuser %}
+
+
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% include 'medical_equipments_head.html' %}
+<style>
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #ffffff;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#000000;
+}
+table#t01 th  {
+    background-color: black;
+    color: white;
+}
+</style>
+
+
+<body>
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                
+      </button>
+      <a class="navbar-brand" href = "/">Central Medical Equipments Directory</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      
+      <ul class="nav navbar-nav navbar-right">
+
+{% if user.is_authenticated %}
+        <li><a href="/state_admin"><span class="glyphicon glyphicon-user"></span>Current Admins</a></li>
+
+        <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+
+        {% endif %}
+
+
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+
+{% if queryset %}
+            
+
+<div class="container" align="center">
+<div align="center">
+  <h3>Request for Country Admin</h3>
+</div>
+<table class="sortable" class="table table-hover table-bordered table-striped table-condensed">
+  <tr>
+    <th>Email ID</th>
+    <th>First Name</th>    
+    <th>Middle Name</th>
+    <th>Last Name</th>
+    <th>Country</th>
+    <th>Mobile No.</th>
+    <th>Documents</th>
+    <th>Approval</th>
+    <th>Rejection</th>
+  </tr>
+ 
+  {% for x in queryset %}
+
+  <form class="form-horizontal" method = "post" id = "state_adminForm" role = "form" >{% csrf_token %}
+
+  <tr>
+  <th>{{ x.email }}</th>
+  <th>{{ x.first_name }}</th>
+  <th>{{ x.middle_name }}</th>
+  <th>{{ x.last_name }}</th>
+  <th>{{ x.country }}</th>
+  <th>{{ x.mobile }}</th>
+  <th><a href = '/media/{{x.file}}' style="cursor:pointer">{{ x.file }}</a></th>
+  <th>
+  
+  
+
+<form method="POST">{% csrf_token %}
+<a href='/country_approve?email={{ x.email }}'>Approve</a>
+
+</form>
+    
+
+      </th>
+
+<th>
+  
+ <form method="POST">{% csrf_token %}
+<a href='/country_reject?email={{ x.email }}'>Reject</a>
+
+</form>
+
+</th>
+
+</tr>
+
+</form>
+
+
+  {% endfor %}
+
+</table>
+</div>
+
+ {% endif %}
+
+
+ &copy /wrig nanosystems pvt ltd
+</body>
+</html>
+
+
+{% endif %}

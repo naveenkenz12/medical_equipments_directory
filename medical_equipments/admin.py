@@ -7,9 +7,12 @@ from django.contrib.auth.models import User
 from medical_equipments.models import equipment
 from medical_equipments.models import request_for_state_admin
 from medical_equipments.models import request_for_district_admin
+from medical_equipments.models import request_for_country_admin
+
 
 from medical_equipments.models import state_admin
 from medical_equipments.models import district_admin
+from medical_equipments.models import country_admin
 from medical_equipments.models import hospital
 
 
@@ -26,6 +29,11 @@ class equipmentadmin(admin.ModelAdmin):
 
 admin.site.register(equipment,equipmentadmin)
 
+class country_adminregisteradmin(admin.ModelAdmin):
+	class meta:
+		model = request_for_country_admin
+
+admin.site.register(request_for_country_admin,country_adminregisteradmin)
 
 class state_adminregisteradmin(admin.ModelAdmin):
 	class meta:
@@ -38,6 +46,12 @@ class district_adminregisteradmin(admin.ModelAdmin):
 		model = request_for_district_admin
 
 admin.site.register(request_for_district_admin,district_adminregisteradmin)
+
+class country_adminadmin(admin.ModelAdmin):
+	class meta:
+		model = country_admin
+
+admin.site.register(country_admin,country_adminadmin)
 
 class state_adminadmin(admin.ModelAdmin):
 	class meta:

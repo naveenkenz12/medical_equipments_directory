@@ -54,7 +54,7 @@ table#t01 th  {
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                                 
       </button>
-      <a class="navbar-brand">Central Medical Equipments Directory</a>
+      <a class="navbar-brand" href = "/">Central Medical Equipments Directory</a>
     </div>
 
 
@@ -83,8 +83,11 @@ table#t01 th  {
 {% if queryset %}
             
 
-
-<table class="sortable">
+<div class="container" align="center">
+<div align="center">
+  <h3>Request for District Admins</h3>
+</div>
+<table class="sortable" class="table table-hover table-bordered table-striped table-condensed">
   <tr>
     <th>Email ID</th>
     <th>First Name</th>    
@@ -127,7 +130,7 @@ table#t01 th  {
 <th>
   
   <form method="POST">{% csrf_token %}
-<a href='/district_reject?email={{ x.email }}'>Approve</a>
+<a href='/district_reject?email={{ x.email }}'>Reject</a>
 
 </form>
 
@@ -140,6 +143,7 @@ table#t01 th  {
   {% endfor %}
 
 </table>
+</div>
 
  {% endif %}
 

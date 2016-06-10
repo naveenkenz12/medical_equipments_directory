@@ -1,0 +1,82 @@
+<!-- 
+author: naveenkenz12
+email: naveenkenz12@gmail.com
+ -->
+
+
+
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% include 'medical_equipments_head.html' %}
+
+
+<body>
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                
+      </button>
+      <a class="navbar-brand" href="/">Central Medical Equipments Directory</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      
+      <ul class="nav navbar-nav navbar-right">
+
+
+        
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+
+
+
+
+ <form class="form-horizontal" method = "post" id = "bottleForm" role = "form" >{% csrf_token %}
+
+
+    {% for field in view_id_form %}
+     
+  <div class="form-group" id="{{field.label}}">
+	<label class="control-label col-md-4">{{ field.label }}</label>
+    <div class="col-md-5 selectContainer" >
+    {{ field }}    
+    </div>
+  </div>
+{% endfor %}
+  <!-- Submit Button -->
+  
+<div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-5">
+      <button class="btn btn-success btn-lg" type = "submit" >submit</button>
+    </div>
+  </div>
+</form>
+
+
+
+
+
+&copy /wrig nanosystems pvt ltd
+
+</body>
+</html>
+

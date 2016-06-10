@@ -1,0 +1,193 @@
+{% if user.is_authenticated %}
+
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% include 'medical_equipments_head.html' %}
+
+
+<body>
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                
+      </button>
+      <a class="navbar-brand" href = "/">Central Medical Equipments Directory</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+
+
+      
+      <ul class="nav navbar-nav navbar-right">
+
+      {% if user.is_superuser %}
+
+        <li><a href="/equipments/all/"><span class="glyphicon"></span>All Equipments</a></li>
+
+      {% endif %}
+
+    {% if not user.is_superuser %}
+    {% if user.is_staff %}
+        <li><a href="/equipments/state/?state={{ queryset.state }}"><span class="glyphicon"></span>All Equipments</a></li>
+
+
+    {% endif %}
+
+
+    {% if not user.is_staff %}
+
+<li><a href="/equipments/district/?district={{ queryset.country }}"><span class="glyphicon"></span>All Equipments</a></li>
+
+     
+
+    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-right-arrow"></span> Hospitals <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/register_hospital">New Hospital Regn.</a></li>
+                <li><a href="/current_hospital">Current Hospitals</a></li>
+               
+                
+              </ul>
+            </li>
+
+    {% endif %}
+    {% endif %}
+
+    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/user">Profile</a></li>
+                <li><a href="/change_password">Change Password</a></li>
+               
+                
+              </ul>
+            </li>
+
+<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+
+
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+<div style="margin:5%">
+
+
+{% if user.is_staff %}
+
+
+<form class="form-horizontal" action='' enctype='multipart/form-data' method = "post" id = "stateadminForm" role = "form" >{% csrf_token %}
+
+
+    {% for field in state_adminform %}
+     
+  <div class="form-group" id="{{field.label}}">
+  <label class="control-label col-md-3">{{ field.label }}</label>
+    <div class="col-md-6 selectContainer" >
+    {{ field }}    
+    </div>
+  </div>
+{% endfor %}
+  <!-- Submit Button -->
+
+
+  {% if messages %}
+<div class = "col-md-4 col-md-6 " >
+<div class="alert alert-danger">
+{% for message in messages %}
+        {{ message|safe }}
+{% endfor %}
+</div>
+</div>
+{% endif %}
+
+  
+<div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button class="btn btn-success btn-lg" type = "submit" >update profile</button>
+    </div>
+  </div>
+</form>
+
+
+{% endif %}
+
+
+{% if not user.is_staff %}
+{% if not user.is_superuser %}
+
+
+
+<form class="form-horizontal" action='' enctype='multipart/form-data' method = "post" id = "stateadminForm" role = "form" >{% csrf_token %}
+
+
+    {% for field in country_adminform %}
+     
+  <div class="form-group" id="{{field.label}}">
+  <label class="control-label col-md-3">{{ field.label }}</label>
+    <div class="col-md-6 selectContainer" >
+    {{ field }}    
+    </div>
+  </div>
+{% endfor %}
+  <!-- Submit Button -->
+
+
+  {% if messages %}
+<div class = "col-md-4 col-md-6 " >
+<div class="alert alert-danger">
+{% for message in messages %}
+        {{ message|safe }}
+{% endfor %}
+</div>
+</div>
+{% endif %}
+
+  
+<div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div id="messages"></div>
+        </div>
+    </div>
+  
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button class="btn btn-success btn-lg" type = "submit" >update profile</button>
+    </div>
+  </div>
+</form>
+
+
+
+
+
+{% endif %}
+
+{% endif %}
+
+
+&copy /inficoders\
+
+
+</body>
+</html>
+
+
+{% endif %}

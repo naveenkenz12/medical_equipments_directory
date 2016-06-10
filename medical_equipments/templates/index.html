@@ -1,0 +1,138 @@
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% include 'medical_equipments_head.html' %}
+<style>
+body {
+  font-family: 'PT Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: #4f5d6e;
+  position: relative;
+  background: rgb(26, 49, 95);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(26, 49, 95, 1)), color-stop(10%, rgba(26, 49, 95, 1)), color-stop(24%, rgba(29, 108, 141, 1)), color-stop(37%, rgba(41, 136, 151, 1)), color-stop(77%, rgba(39, 45, 100, 1)), color-stop(90%, rgba(26, 49, 95, 1)), color-stop(100%, rgba(26, 49, 95, 1)));
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#1a315f', endColorstr='#1a315f', GradientType=0);
+}
+
+.body-wrap {
+  min-height: 700px;
+}
+
+.body-wrap {
+  position: relative;
+  z-index: 0;
+}
+
+.body-wrap:before,
+.body-wrap:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 260px;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(26, 49, 95, 1)), color-stop(100%, rgba(26, 49, 95, 0)));
+  background: linear-gradient(to bottom, rgba(26, 49, 95, 1) 0%, rgba(26, 49, 95, 0) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#1a315f', endColorstr='#001a315f', GradientType=0);
+}
+
+.body-wrap:after {
+  top: auto;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(26, 49, 95, 0) 0%, rgba(26, 49, 95, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#001a315f', endColorstr='#1a315f', GradientType=0);
+}
+</style>
+
+
+<body>
+
+<script>
+
+$('ul.nav li.dropdown').hover(function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
+}, function() {
+  $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
+});
+</script>
+
+
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                
+      </button>
+      <a class="navbar-brand">Central Medical Equipments Directory</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      
+      <ul class="nav navbar-nav navbar-right">
+
+      	        <!-- <li><a href="/register"><span class="glyphicon glyphicon-log-in"></span> Sign Up </a></li> -->
+
+        
+      	        <li><a href="/equipment_query"><span class="glyphicon glyphicon-log-in"></span>Query</a></li>
+
+
+      {% if not user.is_authenticated %}
+
+        <!-- <li><a href="/register"><span class="glyphicon glyphicon-log-in"></span> Sign Up </a></li> -->
+
+        <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+
+        
+
+
+        {% endif %}
+
+        {% if user.is_authenticated %}
+
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/user">Profile</a></li>
+                <li><a href="/change_password">Change Password</a></li>
+               
+                
+              </ul>
+            </li>
+        {% endif %}
+
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Register <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/admin_register_form/country">Country (except India)</a></li>
+                <li><a href="/admin_register_form/state">Indian States</a></li>
+                <li><a href="/admin_register_form/district">Indian Districts</a></li>
+                
+              </ul>
+            </li>
+
+        {% if user.is_authenticated %}
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+
+        {% endif %}
+
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+
+
+
+
+&copy /wrig nanosystems pvt ltd
+
+</body>
+</html>
+

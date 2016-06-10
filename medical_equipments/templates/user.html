@@ -19,7 +19,7 @@
       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                                 
       </button>
-      <a class="navbar-brand">Central Medical Equipments Directory</a>
+      <a class="navbar-brand" href = "/">Central Medical Equipments Directory</a>
     </div>
 
 
@@ -29,16 +29,80 @@
       
       <ul class="nav navbar-nav navbar-right">
 
+      {% if user.is_superuser %}
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-right-arrow"></span>State Admins<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/state_requests">New Requests</a></li>
+                <li><a href="/state_admin">Current Admins</a></li>
+               
+                
+              </ul>
+            </li>
+
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-right-arrow"></span>Country Admins<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/country_requests">New Requests</a></li>
+                <li><a href="/country_admin">Current Admins</a></li>
+               
+                
+              </ul>
+            </li>
+
+        <li><a href="/equipments/all/"><span class="glyphicon"></span>All Equipments</a></li>
+        <li><a href="/all_hospital/"><span class="glyphicon"></span>All Hospitals</a></li>
+
+
+
+      {% endif %}
+
     {% if not user.is_superuser %}
+    {% if user.is_staff %}
+        <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-right-arrow"></span>District Admins<b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/district_requests">New Requests</a></li>
+                <li><a href="/district_admin">Current Admins</a></li>
+               
+                
+              </ul>
+            </li>
+        <li><a href="/equipments/state/?state={{ queryset.state }}"><span class="glyphicon"></span>All Equipments</a></li>
+        <li><a href="/state_hospital/?state={{ queryset.state }}"><span class="glyphicon"></span>All Hospitals</a></li>
+
+
+    {% endif %}
+
+
     {% if not user.is_staff %}
 
-    <li><a href="/register_hospital"><span class="glyphicon glyphicon-left-arrow"></span> New Hospital Regn </a></li>  
+<li><a href="/equipments/district/?district={{ queryset.district }}"><span class="glyphicon"></span>All Equipments</a></li>
+
+     
+
+    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-right-arrow"></span> Hospitals <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/register_hospital">New Hospital Regn.</a></li>
+                <li><a href="/current_hospital">Current Hospitals</a></li>
+               
+                
+              </ul>
+            </li>
 
     {% endif %}
     {% endif %}
 
-
-<li><a href="/medical_equipments_form"><span class="glyphicon glyphicon-left-arrow"></span> Back </a></li>
+    <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/user">Profile</a></li>
+                <li><a href="/change_password">Change Password</a></li>
+               
+                
+              </ul>
+            </li>
 
 <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
 

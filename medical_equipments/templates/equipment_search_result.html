@@ -1,0 +1,132 @@
+
+
+{% load staticfiles %}
+
+<!DOCTYPE HTML>
+<html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+{% include 'medical_equipments_head.html' %}
+
+
+
+<style>
+table {
+    width:100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+    text-align: left;
+}
+table#t01 tr:nth-child(even) {
+    background-color: #ffffff;
+}
+table#t01 tr:nth-child(odd) {
+   background-color:#000000;
+}
+table#t01 th  {
+    background-color: black;
+    color: white;
+}
+</style>
+
+
+<body>
+
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                                
+      </button>
+      <a class="navbar-brand" href = "/">Central Medical Equipments Directory</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="myNavbar">
+      
+      <ul class="nav navbar-nav navbar-right">
+
+                <li><a href="/equipment_query"><span class="glyphicon glyphicon-log-in"></span>Query</a></li>
+      
+
+{% if user.is_authenticated %}
+       
+
+        <li><a href="/user"><span class="glyphicon glyphicon-user"></span> {{ user.username }}</a></li>
+
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout </a></li>
+
+        {% endif %}
+
+
+      </ul>
+    </div>
+  </div>
+
+
+</nav>
+
+
+
+
+
+
+{% if queryset %}
+            
+
+<div class="container" align="center">
+<div align="center">
+  <h3>List of Equipments in Hospital {{ hid }}</h3>
+</div>
+<table class="sortable" class="table table-hover table-bordered table-striped table-condensed">
+  <tr>    
+    <th>Hospital ID</th>
+    <th>Hospital Name</th>
+    <th>Equipment ID</th>
+    <th>Equipment Name</th>
+    <th>Equipment Category</th>
+    <th>Equipment Model</th>
+    <th>Status</th>
+    
+  </tr>
+ 
+  {% for x in queryset %}
+
+  <form class="form-horizontal" method = "post" id = "state_adminForm" role = "form" >{% csrf_token %}
+
+  <tr>
+  <th><a href='/hospital_view/?hid={{ x.hospital_id }}'>{{ x.hospital_id }}</a></th>
+  <th>{{ x.hospital_name }}</th>
+  <th><a href='/equipment_view/?hid={{ x.hospital_id }}&eid={{ x.equipment_id }}'>{{ x.equipment_id }}</a></th>
+  <th>{{ x.equipment_name }}</th>
+  <th>{{ x.equipment_category }}</th>
+  <th>{{ x.equipment_model }}</th>
+  <th>{{ x.working_condition }}</th>
+
+
+
+</tr>
+
+</form>
+
+
+  {% endfor %}
+
+</table>
+</div>
+
+ {% endif %}
+
+
+ &copy /wrig nanosystems pvt ltd
+</body>
+</html>
+

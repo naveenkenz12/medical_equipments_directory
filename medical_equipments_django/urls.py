@@ -23,7 +23,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^$' , 'medical_equipments.views.login' , name = 'login'),
+    url(r'^$' , 'medical_equipments.views.index' , name = 'index'),
 
     url(r'^medical_equipments_form/$', 'medical_equipments.views.medical_equipments_form', name='medical_equipments_form'),
 
@@ -43,11 +43,17 @@ urlpatterns = [
 
     url(r'^admin_register_form/state/' , 'medical_equipments.views.state_admin_register_form' , name = 'state_admin_register_form'),
 
+    url(r'^admin_register_form/country/' , 'medical_equipments.views.country_admin_register_form' , name = 'country_admin_register_form'),
+
     url(r'^admin_register_form/district/' , 'medical_equipments.views.district_admin_register_form' , name = 'district_admin_register_form'),
 
     url(r'^state_requests/' , 'medical_equipments.views.state_requests' , name = 'state_requests'),
 
+    url(r'^country_requests/' , 'medical_equipments.views.country_requests' , name = 'country_requests'),
+
     url(r'^district_requests/' , 'medical_equipments.views.district_requests' , name = 'district_requests'),
+
+    url(r'^viewid/' , 'medical_equipments.views.viewid' , name = 'hospital'),
 
     #url(r'^district_requests/(?P<email>\d+)/$' , 'medical_equipments.views.district_requests' , name = 'district_requests'),
 
@@ -67,11 +73,19 @@ urlpatterns = [
 
     url(r'^state_reject/$' , 'medical_equipments.views.state_reject' , name = 'reject'),
 
+    url(r'^country_approve/$' , 'medical_equipments.views.country_approve' , name = 'approve'),
+
+    url(r'^country_reject/$' , 'medical_equipments.views.country_reject' , name = 'reject'),
+
     url(r'^state_admin/' , 'medical_equipments.views.show_state_admin' , name = 'state_admin'),
+
+    url(r'^country_admin/' , 'medical_equipments.views.show_country_admin' , name = 'country_admin'),
     
     url(r'^district_admin/' , 'medical_equipments.views.show_district_admin' , name = 'district_admin'),
 
     url(r'^state_remove/$' , 'medical_equipments.views.state_remove' , name = 'state_remove'),
+
+    url(r'^country_remove/$' , 'medical_equipments.views.country_remove' , name = 'country_remove'),
 
     url(r'^district_remove/$' , 'medical_equipments.views.district_remove' , name = 'district_remove'),
 
@@ -87,11 +101,30 @@ urlpatterns = [
 
     url(r'^see_equipments/$' , 'medical_equipments.views.see_equipments' , name = 'see_equipments'),
 
+    url(r'^hospital_equipments/$' , 'medical_equipments.views.hospital_equipments' , name = 'see_equipments'),
+
     url(r'^equipments/district/$' , 'medical_equipments.views.district_equipments' , name = 'district_equipments'),
 
     url(r'^equipments/state/$' , 'medical_equipments.views.state_equipments' , name = 'state_equipments'),
 
     url(r'^equipments/all/' , 'medical_equipments.views.all_equipments' , name = 'all_equipments'),
+
+    url(r'^equipment_view/$' , 'medical_equipments.views.equipment_view' , name = 'equipment_view' ),
+
+    url(r'^hospital_view/$' , 'medical_equipments.views.hospital_view' , name = 'hospital_view' ),
+
+    url(r'^registration/hospital/success/$' , 'medical_equipments.views.valid_hospital_registration' , name = 'Success' ),
+
+    url(r'^registration/equipment/success/$' , 'medical_equipments.views.valid_equipment_registration' , name = 'Success' ),
+
+    url(r'^state_hospital/$' , 'medical_equipments.views.state_hospital' , name = 'state_hospital'),
+
+    url(r'^all_hospital/' , 'medical_equipments.views.all_hospital' , name = 'all_hospital'),
+
+    url(r'^equipment_query/' , 'medical_equipments.views.equipment_query' , name = 'Search'),
+
+
+    #url(r'^view_hospital/$' , 'medical_equipments.views.view_hospital' , name = 'equipments'),
 
 
     #url(r'^home2/' , 'medical_equipments.views.home2' , name = 'home2'),    
