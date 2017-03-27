@@ -19,11 +19,21 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 
+from medical_equipments_django import settings
+
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^$' , 'medical_equipments.views.index' , name = 'index'),
+    url(r'^$' , 'medical_equipments.views.create_admin' , name = 'index'),
+
+    ### added
+    url(r'^home/$' , 'medical_equipments.views.index' , name = 'index'),
+
+
+    url(r'^summary/' , 'medical_equipments.views.summary' , name = 'summary'),
+
+    url(r'^contact_us/' , 'medical_equipments.views.contact_us' , name = 'contact_us'),
 
     url(r'^medical_equipments_form/$', 'medical_equipments.views.medical_equipments_form', name='medical_equipments_form'),
 
@@ -31,7 +41,7 @@ urlpatterns = [
 
     url(r'^logout/$' , 'medical_equipments.views.logout' , name = 'medical_equipments_form' ),
 
-    url(r'^register/' , 'medical_equipments.views.register' , name = 'register'),
+    #url(r'^register/' , 'medical_equipments.views.register' , name = 'register'),
 
     url(r'^authorized/' , 'medical_equipments.views.authorized_view' , name = 'authorized_view'),
 
@@ -39,7 +49,7 @@ urlpatterns = [
     
     url(r'^request_sent/' , 'medical_equipments.views.request_sent' , name = 'request'),
 
-    url(r'^invalid_request/' , 'medical_equipments.views.invalid_request' , name = 'invalid'),
+    #url(r'^invalid_request/' , 'medical_equipments.views.invalid_request' , name = 'invalid'),
 
     url(r'^admin_register_form/state/' , 'medical_equipments.views.state_admin_register_form' , name = 'state_admin_register_form'),
 
@@ -53,17 +63,7 @@ urlpatterns = [
 
     url(r'^district_requests/' , 'medical_equipments.views.district_requests' , name = 'district_requests'),
 
-    url(r'^viewid/' , 'medical_equipments.views.viewid' , name = 'hospital'),
-
-    #url(r'^district_requests/(?P<email>\d+)/$' , 'medical_equipments.views.district_requests' , name = 'district_requests'),
-
-    #url(r'^make_state_admin/' , 'medical_equipments.views.make_state_admin' , name = 'make_state_admin'),
     
-    url(r'^edit_fav/' , 'medical_equipments.views.edit_fav' , name='edit_fav' ),
-    
-    #url(r'^post/' , 'medical_equipments.views.home' , name = 'home'),
-
-    #url(r'^reject/' , 'medical_equipments.views.reject' , name = 'reject'),
 
     url(r'^district_approve/$' , 'medical_equipments.views.district_approve' , name = 'approve'),
 
@@ -123,7 +123,53 @@ urlpatterns = [
 
     url(r'^equipment_query/' , 'medical_equipments.views.equipment_query' , name = 'Search'),
 
+    url(r'^show_country/$' , 'medical_equipments.views.show_country' , name = 'summary'),
 
+    url(r'^show_state/$' , 'medical_equipments.views.show_state' , name = 'summary'),
+
+    url(r'^show_district/$' , 'medical_equipments.views.show_district' , name = 'summary'),
+
+    url(r'^show_hospital/$' , 'medical_equipments.views.show_hospital' , name = 'summary'),
+
+    url(r'^summary_india/' , 'medical_equipments.views.summary_india' , name = 'summary'),
+
+    url(r'^summary_India/' , 'medical_equipments.views.summary_india' , name = 'summary'),
+
+    url(r'^summary_country/$' , 'medical_equipments.views.summary_country' , name = 'summary'),
+
+    url(r'^summary_state/$' , 'medical_equipments.views.summary_state' , name = 'summary'),
+
+    url(r'^summary_district/$' , 'medical_equipments.views.summary_district' , name = 'summary'),
+
+    url(r'^summary_hospital/$' , 'medical_equipments.views.summary_hospital' , name = 'summary'),
+
+    #url(r'^map/' , 'medical_equipments.views.map' , name = 'map'),
+
+    url(r'^upload/' , 'medical_equipments.views.upload_file' , name = 'file'),
+
+    url(r'^success/' , 'medical_equipments.views.success' , name = 'success'),
+
+    url(r'^download/$' , 'medical_equipments.views.download' , name = 'download'),
+
+    url(r'^register_select/$' , 'medical_equipments.views.register_select' , name = 'register'),
+
+    url(r'^feedback/$' , 'medical_equipments.views.feedback' , name = 'feedback'),
+
+    url(r'^maintain/1/add/$' , 'medical_equipments.views.add_country' , name = 'maintain'),
+    url(r'^maintain/2/add/$' , 'medical_equipments.views.add_state' , name = 'maintain'),
+    url(r'^maintain/3/add/$' , 'medical_equipments.views.add_district' , name = 'maintain'),
+    url(r'^maintain/1/delete/$' , 'medical_equipments.views.delete_country' , name = 'maintain'),
+    url(r'^maintain/2/delete/$' , 'medical_equipments.views.delete_state' , name = 'maintain'),
+    url(r'^maintain/3/delete/$' , 'medical_equipments.views.delete_district' , name = 'maintain'),
+
+    url(r'^settings/$' , 'medical_equipments.views.setting' , name = 'maintain'),
+
+    url(r'^register_new/' , 'medical_equipments.views.register_new' , name = 'register'),
+
+    url(r'^db/' , 'medical_equipments.views.db' , name = 'register'),
+    url(r'^bems_offline/' , 'medical_equipments.views.bems_offline' , name = 'offline'),
+    url(r'^instruction/' , 'medical_equipments.views.instruction' , name = 'help'),
+#
     #url(r'^view_hospital/$' , 'medical_equipments.views.view_hospital' , name = 'equipments'),
 
 
@@ -138,5 +184,8 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+urlpatterns += patterns('',(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),)
 
-admin.site.site_header = 'Central Medical Equipments Directory'
+urlpatterns += patterns('',(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),)
+
+admin.site.site_header = 'Biomedical Equipments Management System'

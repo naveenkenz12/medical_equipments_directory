@@ -15,6 +15,8 @@ from .email_info import *
 from .sms_info import *
 from .captch_info import *
 
+import dj_database_url
+
 RECAPTCHA_PUBLIC_KEY = RECAPTCHA_PUBLIC_KEY
 RECAPTCHA_PRIVATE_KEY = RECAPTCHA_PRIVATE_KEY
 
@@ -39,9 +41,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'bn0k87b)v_oa=7#(hndhi$$=yfv%2=fh$mzg=abq=se_t--s8x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 TEMPLATE_DEBUG = DEBUG
 
@@ -59,6 +61,8 @@ INSTALLED_APPS = [
     'medical_equipments',
     'captcha',
     'nocaptcha_recaptcha',
+    'csvimport.app.CSVImportConf',
+    'storages',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -71,6 +75,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'medical_equipments_django.urls'
@@ -116,6 +122,14 @@ DATABASES = {
     }
 }
 
+DATABASES['default'] =  dj_database_url.config()
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
 
 
 REST_FRAMEWORK = {
@@ -134,6 +148,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+
+
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -159,18 +175,42 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-STATIC_URL = '/static/'
+os.environ['S3_USE_SIGV4'] = 'True'
+AWS_S3_HOST = 's3.ap-south-1.amazonaws.com'
+
+AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+AWS_STORAGE_BUCKET_NAME = 'bmems-assets'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.ap-south-1.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_CLOUDFRONT_DOMAIN = 'd3uxfmave91to3.cloudfront.net'
+#STATIC_URL = "https://%s/" % AWS_S3_CUSTOM_DOMAIN
+#STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+
+MEDIAFILES_LOCATION = 'media'
+MEDIA_ROOT = '/%s/' % MEDIAFILES_LOCATION
+MEDIA_URL = '//%s/%s/' % (AWS_CLOUDFRONT_DOMAIN, MEDIAFILES_LOCATION)
+MEDIAFILES_STORAGE ='medical_equipments_django.custom_storages.MediaStorage'
+
+
+STATICFILES_LOCATION = 'static'
+STATIC_ROOT = '/%s/' % STATICFILES_LOCATION
+STATIC_URL = '//%s/%s/' % (AWS_CLOUDFRONT_DOMAIN, STATICFILES_LOCATION)
+STATICFILES_STORAGE ='medical_equipments_django.custom_storages.StaticStorage'
+
+#STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static", "staticfile"),
 )
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static", "staticroot")
+#STATIC_ROOT = os.path.join(BASE_DIR, "static", "staticroot")
 
-MEDIA_URL = '/media/'
+#MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "static", "mediaroot")
+#MEDIA_ROOT = os.path.join(BASE_DIR, "static", "mediaroot")
 
 MEDIA_DIRS = (
     os.path.join(BASE_DIR, "static", "mediafile"),
